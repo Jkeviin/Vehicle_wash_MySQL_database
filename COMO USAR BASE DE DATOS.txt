@@ -1,0 +1,33 @@
+Para utilizar la base de datos, primero se deben ingresar los datos de los usuarios en la tabla "Usuarios". Por ejemplo, si un usuario llamado Juan desea utilizar un lavadero, se debe ingresar su información en la tabla, incluyendo su nombre, apellido, correo electrónico, teléfono y dirección.
+
+Luego, se pueden buscar los lavaderos disponibles en la tabla "Lavaderos", utilizando filtros como la ciudad o el horario de atención. Por ejemplo, si Juan vive en la ciudad de Buenos Aires y necesita lavar su auto en un horario nocturno, se pueden buscar lavaderos que estén en esa ciudad y que tengan horarios de atención en la noche.
+
+Una vez que Juan ha elegido un lavadero, puede ver las imágenes del mismo en la tabla "ImagenesLavaderos". Por ejemplo, si el lavadero elegido tiene varias imágenes disponibles, Juan puede verlas para tener una idea de cómo es el lugar.
+
+Si Juan tiene algún problema o queja sobre el lavadero, puede utilizar la tabla "QuejasReclamaciones" para reportarlo. Por ejemplo, si el lavadero no cumplió con lo prometido o si el servicio no fue satisfactorio, Juan puede ingresar una queja en la tabla.
+
+Para conocer los horarios de atención específicos del lavadero elegido, se pueden utilizar los datos de la tabla "Horarios". Por ejemplo, si Juan necesita saber a qué hora abre el lavadero los domingos, puede buscar esa información en la tabla.
+
+Si el lavadero ofrece diferentes tipos de lavado para diferentes tipos de vehículos, se pueden buscar estos datos en la tabla "TiposVehiculos". Por ejemplo, si Juan tiene una camioneta, puede buscar si el lavadero ofrece un lavado específico para ese tipo de vehículo.
+
+Para conocer los servicios ofrecidos por el lavadero, se pueden buscar en la tabla "Servicios". Por ejemplo, si Juan necesita que le limpien el interior del auto, puede buscar si el lavadero ofrece ese servicio en la tabla.
+
+Finalmente, para conocer los precios de los servicios ofrecidos, se pueden utilizar las tablas "Precios" y "PreciosServicios". Por ejemplo, si Juan quiere saber cuánto cuesta el lavado completo de su auto, puede buscar ese servicio en la tabla "Servicios" y luego ver su precio correspondiente en la tabla "PreciosServicios".
+
+La tabla "Reservas" se utiliza para almacenar información sobre las reservas realizadas por los usuarios en los distintos lavaderos. Cada reserva tiene un identificador único, el ID del usuario que la hizo, el ID del lavadero y del servicio seleccionado, la fecha y hora de la reserva y su estado actual (pendiente, confirmada o cancelada). Esto permite a los administradores del sistema ver las reservas actuales, verificar las reservas pendientes y gestionar las cancelaciones de las mismas.
+
+La tabla "ReservasCanceladas" se utiliza para almacenar información sobre las reservas que han sido canceladas por los usuarios o por los administradores. Cada registro contiene el identificador de la reserva cancelada, el motivo de la cancelación y la fecha y hora de la cancelación. Esto puede ser útil para hacer un seguimiento de las cancelaciones de reservas y analizar los motivos comunes detrás de las cancelaciones.
+
+La tabla "Vehiculos" almacena información sobre los vehículos de los usuarios que realizan las reservas. Cada registro contiene el identificador único del vehículo, el ID del tipo de vehículo, el ID del usuario, la marca, el modelo, el año y la placa del vehículo. Esto puede ser utilizado para verificar el tipo de vehículo y el tamaño del vehículo que se ajusta al servicio de lavado disponible en el lavadero seleccionado por el usuario.
+
+La tabla "Notificaciones" se utiliza para almacenar información sobre las notificaciones enviadas a los usuarios en relación a sus reservas o a promociones especiales del lavadero. Cada registro contiene el identificador único de la notificación, el ID del usuario que recibió la notificación, el ID del lavadero, la fecha y hora en que se envió la notificación y el mensaje enviado. Esto permite enviar notificaciones relevantes y personalizadas a los usuarios.
+
+La tabla "ValoracionesUsuarios" se utiliza para almacenar información sobre las valoraciones que los usuarios hacen sobre los lavaderos en los que han lavado sus vehículos. Cada registro contiene el identificador único de la valoración, el ID del lavadero, el ID del usuario, la valoración (en forma de una puntuación de 1 a 5 estrellas), la fecha y hora en que se realizó la valoración y los comentarios del usuario. Esto puede ser utilizado para evaluar la calidad de los lavaderos y tomar medidas para mejorar el servicio.
+
+La tabla "PromocionesDescuentos" almacena información sobre las promociones y descuentos ofrecidos por los lavaderos. Cada registro contiene el identificador único de la promoción, el ID del lavadero, el ID del tipo de vehículo, el ID del servicio, el descuento ofrecido, el código de promoción, la fecha de inicio y fin de la promoción, el estado actual de la promoción (activo o inactivo) y la cantidad de promociones disponibles. Esto permite a los administradores del sistema gestionar las promociones y descuentos ofrecidos a los usuarios.
+
+La tabla "Estadisticas" se utiliza para almacenar información estadística sobre los lavaderos, incluyendo la cantidad de vehículos lavados, la cantidad de servicios vendidos, el total de ingresos
+
+Pagos: Esta tabla podría utilizarse para registrar los pagos que se realizan por cada reserva de lavado de autos. Podría incluir información sobre la fecha y hora del pago, la cantidad que se pagó, el estado del pago y una referencia a la reserva correspondiente. También podría ser útil para realizar un seguimiento de los pagos pendientes o rechazados.
+
+Transacciones: Esta tabla podría utilizarse para registrar cualquier transacción financiera que se realice en relación con el servicio de lavado de autos, incluyendo pagos, reembolsos y cargos adicionales. Podría incluir información sobre la fecha y hora de la transacción, el tipo de transacción, la cantidad involucrada, y referencias a los usuarios, lavaderos y reservas correspondientes. Esta tabla podría ser útil para realizar un seguimiento de los ingresos y gastos del negocio, así como para detectar cualquier problema o anomalía en los pagos y transacciones realizados.
