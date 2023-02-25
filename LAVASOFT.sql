@@ -8,10 +8,12 @@ CREATE TABLE Usuarios (
   Nombre VARCHAR(50) NOT NULL,
   Apellido VARCHAR(50) NOT NULL,
   CorreoElectronico VARCHAR(100) NOT NULL,
-  Salt VARCHAR(50) NOT NULL,
-  HashContrasena VARCHAR(255) NOT NULL,
+  Contrasena VARCHAR(255) NOT NULL,
   Telefono VARCHAR(20) NOT NULL,
   Direccion VARCHAR(100) NOT NULL,
+  Token varchar(100) NULL,
+  Creado date not null, 
+  Confirmado boolean not null
 );
 
 CREATE TABLE Lavaderos (
