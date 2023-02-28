@@ -1,187 +1,194 @@
 drop database lavasoft;
-CREATE DATABASE lavasoft;
+create database lavasoft;
 
-USE lavasoft;
+use lavasoft;
 
-CREATE TABLE Usuarios (
-  ID_Usuario INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  Nombre VARCHAR(50) NOT NULL,
-  Apellido VARCHAR(50) NOT NULL,
-  CorreoElectronico VARCHAR(100) NOT NULL,
-  Contrasena VARCHAR(255) NOT NULL,
-  Telefono VARCHAR(20) NOT NULL,
-  Direccion VARCHAR(100) NOT NULL,
-  Token varchar(100) NULL,
-  Creado date not null, 
-  Confirmado boolean not null
+create table usuarios (
+id_usuario int auto_increment not null primary key,
+nombre varchar(50) not null,
+apellido varchar(50) not null,
+correo_electronico varchar(255) not null unique,
+contrasena varchar(255) not null,
+telefono varchar(20) not null,
+token varchar(100) null,
+creado timestamp not null default current_timestamp,
+confirmado boolean not null default false,
+rol varchar(50) not null default 'cliente'
 );
 
-CREATE TABLE Lavaderos (
-  ID_Lavadero INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  Nombre VARCHAR(50) NOT NULL,
-  Ciudad VARCHAR(50) NOT NULL,
-  Direccion VARCHAR(100) NOT NULL,
-  Telefono VARCHAR(20) NOT NULL,
-  CorreoElectronico VARCHAR(100) NOT NULL,
-  HorarioAtencion VARCHAR(100) NOT NULL,
-  UltimaActualizacion DATETIME NOT NULL,
-  CalificacionPromedio FLOAT NOT NULL,
-  ImagenLavadero VARCHAR(255)
+insert into usuarios (nombre, apellido, correo_electronico, contrasena, telefono, token) 
+	values('kevin', 'ortega', 'slash2130kevin@gmail.com', 'hola123', '3026009175', 'dfaf46saf48');
+    
+    select * from usuarios;
+
+
+
+create table lavaderos (
+id_lavadero int not null auto_increment primary key,
+nombre varchar(50) not null,
+ciudad varchar(50) not null,
+direccion varchar(100) not null,
+telefono varchar(20) not null,
+correo_electronico varchar(100) not null,
+horario_atencion varchar(100) not null,
+ultima_actualizacion datetime not null,
+calificacion_promedio float not null,
+imagen_lavadero varchar(255)
 );
 
-CREATE TABLE ImagenesLavaderos (
-ID_ImagenLavadero INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-ID_Lavadero INT NOT NULL,
-RutaImagen VARCHAR(255) NOT NULL,
-FOREIGN KEY (ID_Lavadero) REFERENCES Lavaderos(ID_Lavadero)
+create table imagenes_lavaderos (
+id_imagen_lavadero int not null auto_increment primary key,
+id_lavadero int not null,
+ruta_imagen varchar(255) not null,
+foreign key (id_lavadero) references lavaderos(id_lavadero)
 );
 
-CREATE TABLE QuejasReclamaciones (
-ID_QuejaReclamacion INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-ID_Usuario INT NOT NULL,
-ID_Lavadero INT NOT NULL,
-DescripcionQueja VARCHAR(255) NOT NULL,
-FechaHoraQueja DATETIME NOT NULL,
-EstadoQueja ENUM('pendiente', 'resuelta') NOT NULL,
-FechaHoraResolucion DATETIME NOT NULL,	
-FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario),
-FOREIGN KEY (ID_Lavadero) REFERENCES Lavaderos(ID_Lavadero)
+create table quejas_reclamaciones (
+id_queja_reclamacion int not null auto_increment primary key,
+id_usuario int not null,
+id_lavadero int not null,
+descripcion_queja varchar(255) not null,
+fecha_hora_queja datetime not null,
+estado_queja enum('pendiente', 'resuelta') not null,
+fecha_hora_resolucion datetime not null,
+foreign key (id_usuario) references usuarios(id_usuario),
+foreign key (id_lavadero) references lavaderos(id_lavadero)
 );
 
-CREATE TABLE Horarios (
-  ID_Horario INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  ID_Lavadero INT NOT NULL,
-  DiaSemana VARCHAR(20) NOT NULL,
-  HoraApertura TIME NOT NULL,
-  HoraCierre TIME NOT NULL,
-  FOREIGN KEY (ID_Lavadero) REFERENCES Lavaderos(ID_Lavadero)
+create table horarios (
+id_horario int not null auto_increment primary key,
+id_lavadero int not null,
+dia_semana varchar(20) not null,
+hora_apertura time not null,
+hora_cierre time not null,
+foreign key (id_lavadero) references lavaderos(id_lavadero)
 );
 
-CREATE TABLE TiposVehiculos (
-ID_TipoVehiculo INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-NombreTipoVehiculo VARCHAR(50) NOT NULL
+create table tipos_vehiculos (
+id_tipo_vehiculo int not null auto_increment primary key,
+nombre_tipo_vehiculo varchar(50) not null
 );
 
-CREATE TABLE Servicios (
-ID_Servicio INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-NombreServicio VARCHAR(50) NOT NULL,
-DescripcionServicio VARCHAR(100) NOT NULL
+create table servicios (
+id_servicio int not null auto_increment primary key,
+nombre_servicio varchar(50) not null,
+descripcion_servicio varchar(100) not null
 );
 
-CREATE TABLE Precios (
-  ID_Precio INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  ID_Servicio INT NOT NULL,
-  Precio FLOAT NOT NULL,
-  FOREIGN KEY (ID_Servicio) REFERENCES Servicios(ID_Servicio)
+create table precios (
+id_precio int not null auto_increment primary key,
+id_servicio int not null,
+precio float not null,
+foreign key (id_servicio) references servicios(id_servicio)
 );
 
-CREATE TABLE PreciosServicios (
-ID_PrecioServicio INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-ID_Servicio INT NOT NULL,
-ID_Precio INT NOT NULL,
-FOREIGN KEY (ID_Servicio) REFERENCES Servicios(ID_Servicio),
-FOREIGN KEY (ID_Precio) REFERENCES Precios(ID_Precio)
+create table precios_servicios (
+id_precio_servicio int not null auto_increment primary key,
+id_servicio int not null,
+id_precio int not null,
+foreign key (id_servicio) references servicios(id_servicio),
+foreign key (id_precio) references precios(id_precio)
 );
 
-CREATE TABLE Reservas (
-  ID_Reserva INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  ID_Usuario INT NOT NULL,
-  ID_Lavadero INT NOT NULL,
-  ID_Servicio INT NOT NULL,
-  FechaHoraReserva DATETIME NOT NULL,
-  EstadoReserva ENUM('pendiente', 'confirmada', 'cancelada') NOT NULL,
-  FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario),
-  FOREIGN KEY (ID_Lavadero) REFERENCES Lavaderos(ID_Lavadero),
-  FOREIGN KEY (ID_Servicio) REFERENCES Servicios(ID_Servicio)
+create table reservas (
+id_reserva int not null auto_increment primary key,
+id_usuario int not null,
+id_lavadero int not null,
+id_servicio int not null,
+fecha_hora_reserva datetime not null,
+estado_reserva enum('pendiente', 'confirmada', 'cancelada') not null,
+foreign key (id_usuario) references usuarios(id_usuario),
+foreign key (id_lavadero) references lavaderos(id_lavadero),
+foreign key (id_servicio) references servicios(id_servicio)
 );
 
-CREATE TABLE ReservasCanceladas (
-  ID_ReservaCancelada INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  ID_Reserva INT NOT NULL,
-  MotivoCancelacion VARCHAR(255) NOT NULL,
-  FechaHoraCancelacion DATETIME NOT NULL,
-  FOREIGN KEY (ID_Reserva) REFERENCES Reservas(ID_Reserva)
+create table reservas_canceladas (
+id_reserva_cancelada int not null auto_increment primary key,
+id_reserva int not null,
+motivo_cancelacion varchar(255) not null,
+fecha_hora_cancelacion datetime not null,
+foreign key (id_reserva) references reservas(id_reserva)
 );
 
-CREATE TABLE Vehiculos (
-  ID_Vehiculo INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  ID_TipoVehiculo INT NOT NULL,
-  ID_Usuario INT NOT NULL,
-  Marca VARCHAR(50) NOT NULL,
-  Modelo VARCHAR(50) NOT NULL,
-  Anio INT NOT NULL,
-  Placa VARCHAR(10) NOT NULL,
-  FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario),
-  FOREIGN KEY (ID_TipoVehiculo) REFERENCES TiposVehiculos(ID_TipoVehiculo)
+create table vehiculos (
+id_vehiculo int not null auto_increment primary key,
+id_tipo_vehiculo int not null,
+id_usuario int not null,
+marca varchar(50) not null,
+modelo varchar(50) not null,
+anio int not null,
+placa varchar(10) not null,
+foreign key (id_usuario) references usuarios(id_usuario),
+foreign key (id_tipo_vehiculo) references tipos_vehiculos(id_tipo_vehiculo)
 );
 
-CREATE TABLE Notificaciones (
-  ID_Notificacion INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  ID_Usuario INT NOT NULL,
-  ID_Lavadero INT NOT NULL,
-  FechaHoraNotificacion DATETIME NOT NULL,
-  Mensaje VARCHAR(100) NOT NULL,
-  FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario),
-  FOREIGN KEY (ID_Lavadero) REFERENCES Lavaderos(ID_Lavadero)
+create table notificaciones (
+id_notificacion int not null auto_increment primary key,
+id_usuario int not null,
+id_lavadero int not null,
+fecha_hora_notificacion datetime not null,
+mensaje varchar(100) not null,
+foreign key (id_usuario) references usuarios(id_usuario),
+foreign key (id_lavadero) references lavaderos(id_lavadero)
 );
 
-CREATE TABLE ValoracionesUsuarios (
-ID_ValoracionUsuario INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-ID_Lavadero INT NOT NULL,
-ID_Usuario INT NOT NULL,
-Valoracion FLOAT NOT NULL,
-FechaValoracion DATETIME NOT NULL,
-Comentarios VARCHAR(255) NOT NULL,
-FOREIGN KEY (ID_Lavadero) REFERENCES Lavaderos(ID_Lavadero),
-FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario)
+create table valoracionesusuarios (
+id_valoracion_usuario int not null auto_increment primary key,
+id_lavadero int not null,
+id_usuario int not null,
+valoracion float not null,
+fecha_valoracion datetime not null,
+comentarios varchar(255) not null,
+foreign key (id_lavadero) references lavaderos(id_lavadero),
+foreign key (id_usuario) references usuarios(id_usuario)
 );
 
-CREATE TABLE PromocionesDescuentos (
-ID_PromocionDescuento INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-ID_Lavadero INT NOT NULL,
-ID_TipoVehiculo INT NOT NULL,
-ID_Servicio INT NOT NULL,
-Descuento FLOAT NOT NULL,
-CodigoPromocion VARCHAR(50) NOT NULL,
-FechaInicio DATE NOT NULL,
-FechaFin DATE NOT NULL,
-EstadoPromocion ENUM('activo', 'inactivo') NOT NULL,
-CantidadDisponible INT NOT NULL,
-FOREIGN KEY (ID_Lavadero) REFERENCES Lavaderos(ID_Lavadero),
-FOREIGN KEY (ID_TipoVehiculo) REFERENCES TiposVehiculos(ID_TipoVehiculo),
-FOREIGN KEY (ID_Servicio) REFERENCES Servicios(ID_Servicio)
+create table promocionesdescuentos (
+id_promocion_descuento int not null auto_increment primary key,
+id_lavadero int not null,
+id_tipo_vehiculo int not null,
+id_servicio int not null,
+descuento float not null,
+codigo_promocion varchar(50) not null,
+fecha_inicio date not null,
+fecha_fin date not null,
+estado_promocion enum('activo', 'inactivo') not null,
+cantidad_disponible int not null,
+foreign key (id_lavadero) references lavaderos(id_lavadero),
+foreign key (id_tipo_vehiculo) references tipos_vehiculos(id_tipo_vehiculo),
+foreign key (id_servicio) references servicios(id_servicio)
 );
 
-CREATE TABLE Estadisticas (
-  ID_Estadisticas INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  ID_Lavadero INT NOT NULL,
-  FechaEstadisticas DATE NOT NULL,
-  CantidadVehiculosLavados INT NOT NULL,
-  CantidadServiciosVendidos INT NOT NULL,
-  TotalIngresos FLOAT NOT NULL,
-  TiempoPromedioLavado FLOAT NOT NULL,
-  TasaOcupacion FLOAT NOT NULL,
-  FOREIGN KEY (ID_Lavadero) REFERENCES Lavaderos(ID_Lavadero)
+create table estadisticas (
+id_estadisticas int not null auto_increment primary key,
+id_lavadero int not null,
+fecha_estadisticas date not null,
+cantidad_vehiculos_lavados int not null,
+cantidad_servicios_vendidos int not null,
+total_ingresos float not null,
+tiempo_promedio_lavado float not null,
+tasa_ocupacion float not null,
+foreign key (id_lavadero) references lavaderos(id_lavadero)
 );
 
-CREATE TABLE Pagos (
-  ID_Pago INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  ID_Reserva INT NOT NULL,
-  FechaPago DATETIME NOT NULL,
-  MontoPago FLOAT NOT NULL,
-  EstadoPago VARCHAR(50) NOT NULL,
-  FOREIGN KEY (ID_Reserva) REFERENCES Reservas(ID_Reserva)
+create table pagos (
+id_pago int not null auto_increment primary key,
+id_reserva int not null,
+fecha_pago datetime not null,
+monto_pago float not null,
+estado_pago varchar(50) not null,
+foreign key (id_reserva) references reservas(id_reserva)
 );
 
-CREATE TABLE Transacciones (
-ID_Transaccion INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-ID_Usuario INT NOT NULL,
-ID_Lavadero INT,
-ID_Reserva INT,
-TipoTransaccion VARCHAR(50) NOT NULL,
-FechaHoraTransaccion DATETIME NOT NULL,
-MontoTransaccion FLOAT NOT NULL,
-FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario),
-FOREIGN KEY (ID_Lavadero) REFERENCES Lavaderos(ID_Lavadero),
-FOREIGN KEY (ID_Reserva) REFERENCES Reservas(ID_Reserva)
+create table transacciones (
+id_transaccion int not null auto_increment primary key,
+id_usuario int not null,
+id_lavadero int,
+id_reserva int,
+tipo_transaccion varchar(50) not null,
+fecha_hora_transaccion datetime not null,
+monto_transaccion float not null,
+foreign key (id_usuario) references usuarios(id_usuario),
+foreign key (id_lavadero) references lavaderos(id_lavadero),
+foreign key (id_reserva) references reservas(id_reserva)
 );
