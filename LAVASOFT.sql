@@ -16,12 +16,7 @@ confirmado boolean not null default false,
 rol varchar(50) not null default 'cliente'
 );
 
-insert into usuarios (nombre, apellido, correo_electronico, contrasena, telefono, token) 
-	values('kevin', 'ortega', 'slash2130kevin@gmail.com', 'hola123', '3026009175', 'dfaf46saf48');
-    
-    select * from usuarios;
-
-
+select * from usuarios;
 
 create table lavaderos (
 id_lavadero int not null auto_increment primary key,
@@ -29,11 +24,15 @@ nombre varchar(50) not null,
 ciudad varchar(50) not null,
 direccion varchar(100) not null,
 telefono varchar(20) not null,
-correo_electronico varchar(100) not null,
+token varchar(100) null,
+correo_electronico varchar(100) not null unique,
+contrasena varchar(255) not null,
 horario_atencion varchar(100) not null,
-ultima_actualizacion datetime not null,
-calificacion_promedio float not null,
-imagen_lavadero varchar(255)
+ultima_actualizacion timestamp not null default current_timestamp,
+calificacion_promedio float null,
+confirmado boolean not null default false,
+estado boolean not null default false
+-- imagen_lavadero varchar(255)
 );
 
 create table imagenes_lavaderos (
@@ -192,3 +191,12 @@ foreign key (id_usuario) references usuarios(id_usuario),
 foreign key (id_lavadero) references lavaderos(id_lavadero),
 foreign key (id_reserva) references reservas(id_reserva)
 );
+
+create table administradores (
+	id_administrador int not null auto_increment primary key,
+    correo_electronico varchar(255) not null unique,
+	contrasena varchar(255) not null
+);
+
+insert into administradores (correo_electronico, contrasena) values ('slash2130kevin@gmail.com', '$2b$10$I/NGKQl96uVNUBE5lP95Ye5kz7Uqao1RYgCFX76QNAXtnPozKV8HO')
+    -- lavasoftadmin123
